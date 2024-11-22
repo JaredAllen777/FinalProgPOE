@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContractPoe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241122190033_AddSubmissionDateToLecturerClaims")]
-    partial class AddSubmissionDateToLecturerClaims
+    [Migration("20241122202941_CreateLecturersTable")]
+    partial class CreateLecturersTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,29 @@ namespace ContractPoe.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ContractPoe.Models.Lecturer", b =>
+                {
+                    b.Property<int>("LecturerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LecturerId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("LecturerId");
+
+                    b.ToTable("Lecturers");
+                });
 
             modelBuilder.Entity("ContractPoe.Models.LecturerClaim", b =>
                 {
@@ -49,12 +72,37 @@ namespace ContractPoe.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
+                    b.Property<int>("LecturerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LecturerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ClaimId");
 
+                    b.HasIndex("LecturerId");
+
                     b.ToTable("LecturerClaims");
+                });
+
+            modelBuilder.Entity("ContractPoe.Models.LecturerClaim", b =>
+                {
+                    b.HasOne("ContractPoe.Models.Lecturer", "Lecturer")
+                        .WithMany("LecturerClaims")
+                        .HasForeignKey("LecturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lecturer");
+                });
+
+            modelBuilder.Entity("ContractPoe.Models.Lecturer", b =>
+                {
+                    b.Navigation("LecturerClaims");
                 });
 #pragma warning restore 612, 618
         }

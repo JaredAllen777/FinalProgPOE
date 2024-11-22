@@ -22,11 +22,19 @@ namespace ContractPoe.Models
 
         // Derived Property
         public double TotalAmount => HoursWorked * HourlyRate;
+
         public bool IsApproved { get; set; } // Non-nullable boolean
+
         // Add SubmissionDate to track when the claim is submitted
         public DateTime SubmissionDate { get; set; }
 
+        // Foreign key to Lecturer
+        public int LecturerId { get; set; }  // Foreign key to Lecturer
 
+        // Navigation property for the Lecturer
+        public Lecturer Lecturer { get; set; }  // Correct navigation property type
+        public string LecturerName { get; set; }
     }
 }
+
 //_____________________________________________END OF FILE_______________________________________________________________\\

@@ -5,7 +5,7 @@
 namespace ContractPoe.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeIsApprovedNonNullable : Migration
+    public partial class InitialCommit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ContractPoe.Models.LecturerClaim>
+
+<h2>Manage Lecturer Claims</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lecturer Name</th>
+            <th>Hours Worked</th>
+            <th>Hourly Rate</th>
+            <th>Additional Notes</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in Model)
+        {
+            <tr>
+                <td>@claim.LecturerName</td> <!-- Display the Lecturer Name -->
+                <td>@claim.HoursWorked</td>
+                <td>@claim.HourlyRate</td>
+                <td>@claim.AdditionalNotes</td>
+                <td>@(claim.IsApproved == true ? "Approved" : "Pending")</td>
+                <td>
+                    @if (claim.IsApproved == null)
+                    {
+                        <form method="post" asp-action="ProcessClaim">
+                            <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                            <button type="submit" name="approve" value="true" class="btn btn-success">Approve</button>
+                            <button type="submit" name="approve" value="false" class="btn btn-danger">Reject</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

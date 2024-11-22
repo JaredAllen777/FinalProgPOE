@@ -18,14 +18,14 @@ namespace ContractPoe.Controllers
             _context = context;  // Store the DbContext instance
         }
 
-        // Your action methods
         public async Task<IActionResult> TrackClaim()
         {
             var allClaims = await _context.LecturerClaims
+                                          .Include(c => c.Lecturer)  // This line loads the Lecturer data as well
                                           .OrderByDescending(c => c.ClaimId)
                                           .ToListAsync();
-            return View("TrackClaim", allClaims); 
 
+            return View(allClaims);
         }
 
         // GET: LecturerClaims

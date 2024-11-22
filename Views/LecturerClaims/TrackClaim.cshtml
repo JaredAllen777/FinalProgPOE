@@ -25,8 +25,10 @@
                 <td>@claim.HoursWorked</td>
                 <td>@claim.HourlyRate</td>
                 <td>@claim.AdditionalNotes</td>
+                <td>@claim.Lecturer.Name</td> 
+                <td>@claim.TotalAmount</td>
+                <td>@claim.IsApproved</td>
                 <td>@claim.SubmissionDate</td>
-                <td>@(claim.IsApproved ? "Approved" : "Pending")</td>
             </tr>
         }
     </tbody>
