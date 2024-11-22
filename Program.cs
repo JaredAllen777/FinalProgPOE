@@ -12,6 +12,7 @@ namespace ContractPoe
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
 
             // Register the DbContext
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -28,12 +29,12 @@ namespace ContractPoe
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseRouting();
-            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=LecturerClaims}/{action=Index}/{id?}");  // Set the default controller to LecturerClaims and action to Index
 
             app.Run();
         }
