@@ -1,53 +1,39 @@
 ﻿@model IEnumerable<ContractPoe.Models.LecturerClaim>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.HoursWorked)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HourlyRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdditionalNotes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DocumentPath)
-            </th>
-            <th></th>
+            <th>ClaimId</th>
+            <th>Hours Worked</th>
+            <th>Hourly Rate</th>
+            <th>Additional Notes</th>
+            <th>Document</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.HoursWorked)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HourlyRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdditionalNotes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DocumentPath)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ClaimId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClaimId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClaimId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var claim in Model)
+        {
+            <tr>
+                <td>@claim.ClaimId</td>
+                <td>@claim.HoursWorked</td>
+                <td>@claim.HourlyRate</td>
+                <td>@claim.AdditionalNotes</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(claim.DocumentPath))
+                    {
+                        <a href="@claim.DocumentPath" target="_blank">View Document</a>
+                    }
+                </td>
+                <td>@(claim.IsApproved ? "Approved" : "Pending")</td>
+                <td>
+                    @if (!claim.IsApproved)
+                    {
+                        <a asp-action="Approve" asp-route-id="@claim.ClaimId" class="btn btn-success">Approve</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

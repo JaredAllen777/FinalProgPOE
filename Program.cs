@@ -32,11 +32,15 @@ namespace ContractPoe
 
             app.UseRouting();
 
+            // Default route to Home controller's Index action
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Review}/{action=Index}/{id?}");  // Set the default controller to LecturerClaims and action to Index
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
     }
 }
+
+
+//___________________________________________________END OF FILE_____________________________________________________________\\

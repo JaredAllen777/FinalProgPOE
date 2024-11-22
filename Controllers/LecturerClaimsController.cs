@@ -53,41 +53,80 @@ namespace ContractPoe.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ClaimId,HoursWorked,HourlyRate,AdditionalNotes")] LecturerClaim lecturerClaim, IFormFile? DocumentPath)
         {
-            if (DocumentPath != null)
+            // Custom Validation Logic
+            if (lecturerClaim.HoursWorked > 40)
             {
-                // Define the path where the file will be saved
-                string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-
-                // Ensure the upload directory exists
-                if (!Directory.Exists(uploadPath))
-                {
-                    Directory.CreateDirectory(uploadPath);
-                }
-
-                // Generate a unique file name
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(DocumentPath.FileName);
-                string filePath = Path.Combine(uploadPath, fileName);
-
-                // Save the file to the server
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await DocumentPath.CopyToAsync(stream);
-                }
-
-                // Set the document path in the model
-                lecturerClaim.DocumentPath = "/uploads/" + fileName;
+                ModelState.AddModelError("HoursWorked", "Hours worked cannot exceed 40 per week.");
             }
 
-            // Validate and save the claim data
+            if (lecturerClaim.HourlyRate < 15 || lecturerClaim.HourlyRate > 50)
+            {
+                ModelState.AddModelError("HourlyRate", "Hourly rate must be between $15 and $50.");
+            }
+
+            if (string.IsNullOrWhiteSpace(lecturerClaim.AdditionalNotes) || lecturerClaim.AdditionalNotes.Length > 500)
+            {
+                ModelState.AddModelError("AdditionalNotes", "Notes cannot exceed 500 characters.");
+            }
+
+            if (DocumentPath == null)
+            {
+                ModelState.AddModelError("DocumentPath", "You must upload a supporting document.");
+            }
+
             if (ModelState.IsValid)
             {
+                // Save file to the server
+                if (DocumentPath != null)
+                {
+                    string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                    if (!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+                    string fileName = Guid.NewGuid() + Path.GetExtension(DocumentPath.FileName);
+                    string filePath = Path.Combine(uploadPath, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await DocumentPath.CopyToAsync(stream);
+                    }
+                    lecturerClaim.DocumentPath = "/uploads/" + fileName;
+                }
+
+                // Add the claim to the context
                 _context.Add(lecturerClaim);
                 await _context.SaveChangesAsync();
+
+                // Debugging check: Verify if the claim was saved
+                var savedClaims = await _context.LecturerClaims.ToListAsync();
+                System.Diagnostics.Debug.WriteLine($"Total Claims Saved: {savedClaims.Count}"); // This will show in the Output window in Visual Studio
+
+                // Success message and redirect
                 TempData["SuccessMessage"] = "Claim submitted successfully!";
                 return RedirectToAction(nameof(Index));
             }
 
+            // If model state is invalid, return the view with validation errors
             return View(lecturerClaim);
+        }
+
+
+
+        public async Task<IActionResult> Approve(int id)
+        {
+            var claim = await _context.LecturerClaims.FindAsync(id);
+            if (claim == null)
+            {
+                return NotFound();
+            }
+
+            claim.IsApproved = true;
+            _context.Update(claim);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Claim approved successfully!";
+            return RedirectToAction(nameof(Index));
         }
 
 

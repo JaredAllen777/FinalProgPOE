@@ -8,12 +8,21 @@ namespace ContractPoe.Models
     {
         [Key]
         public int ClaimId { get; set; }
+
+        [Range(0, 40, ErrorMessage = "Hours worked must be between 0 and 40.")]
         public double HoursWorked { get; set; }
+
+        [Range(15, 50, ErrorMessage = "Hourly rate must be between $15 and $50.")]
         public double HourlyRate { get; set; }
-        //non mapped property
-        public double TotalAmount => HoursWorked * HourlyRate;
+
+        [MaxLength(500, ErrorMessage = "Notes cannot exceed 500 characters.")]
         public string? AdditionalNotes { get; set; }
+
         public string? DocumentPath { get; set; }
+
+        // Derived Property
+        public double TotalAmount => HoursWorked * HourlyRate;
+        public bool IsApproved { get; set; } = false;
     }
 }
 //_____________________________________________END OF FILE_______________________________________________________________\\

@@ -1,8 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to the Contract Claim System";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h2>Welcome to the Contract Claim System</h2>
+<p>Welcome to the Contract Claim System. You can submit a claim or view existing claims here.</p>
+
+<div>
+    <a href="@Url.Action("Create", "LecturerClaims")" class="btn btn-primary">Create Claim</a>
+    <a href="@Url.Action("Index", "LecturerClaims")" class="btn btn-secondary">View Claims</a>
 </div>
+
