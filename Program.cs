@@ -34,7 +34,7 @@ namespace ContractPoe
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=LecturerClaims}/{action=Index}/{id?}");  // Set the default controller to LecturerClaims and action to Index
+                pattern: "{controller=Review}/{action=Index}/{id?}");  // Set the default controller to LecturerClaims and action to Index
 
             app.Run();
         }
