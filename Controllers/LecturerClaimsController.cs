@@ -15,7 +15,17 @@ namespace ContractPoe.Controllers
 
         public LecturerClaimsController(AppDbContext context)
         {
-            _context = context;
+            _context = context;  // Store the DbContext instance
+        }
+
+        // Your action methods
+        public async Task<IActionResult> TrackClaim()
+        {
+            var allClaims = await _context.LecturerClaims
+                                          .OrderByDescending(c => c.ClaimId)
+                                          .ToListAsync();
+            return View("TrackClaim", allClaims); 
+
         }
 
         // GET: LecturerClaims
@@ -111,8 +121,6 @@ namespace ContractPoe.Controllers
             return View(lecturerClaim);
         }
 
-
-
         public async Task<IActionResult> Approve(int id)
         {
             var claim = await _context.LecturerClaims.FindAsync(id);
@@ -128,7 +136,6 @@ namespace ContractPoe.Controllers
             TempData["SuccessMessage"] = "Claim approved successfully!";
             return RedirectToAction(nameof(Index));
         }
-
 
         // GET: LecturerClaims/Edit/5
         public async Task<IActionResult> Edit(int? id)

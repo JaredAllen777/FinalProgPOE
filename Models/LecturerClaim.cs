@@ -22,7 +22,11 @@ namespace ContractPoe.Models
 
         // Derived Property
         public double TotalAmount => HoursWorked * HourlyRate;
-        public bool IsApproved { get; set; } = false;
+        public bool IsApproved { get; set; } // Non-nullable boolean
+        // Add SubmissionDate to track when the claim is submitted
+        public DateTime SubmissionDate { get; set; }
+
+
     }
 }
 //_____________________________________________END OF FILE_______________________________________________________________\\
