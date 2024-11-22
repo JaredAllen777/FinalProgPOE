@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
+#//_____________________________________________START OF FILE________________________________________________________________\\
 
 namespace ContractPoe.Migrations
 {
@@ -35,3 +35,5 @@ namespace ContractPoe.Migrations
         }
     }
 }
+
+//_________________________________________________END OF FILE__________________________________________________________________\\
